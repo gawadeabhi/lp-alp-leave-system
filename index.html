@@ -60,7 +60,7 @@ border:1px solid #888;
 
 <div id="loginBox">
 
-<input id="empNo" placeholder="Employee Number">
+<input type="text" id="empNo" placeholder="Employee Number">
 
 <button onclick="login()">Login</button>
 
@@ -80,10 +80,10 @@ const waitingLimit=4
 
 function login(){
 
-employee=document.getElementById("empNo").value
+employee=document.getElementById("empNo").value.trim()
 
 if(employee==""){
-alert("Enter employee number")
+alert("Enter Employee Number")
 return
 }
 
@@ -160,7 +160,6 @@ let w=leaveData[date].waiting
 if(c.includes(employee)||w.includes(employee)){
 
 alert("Already applied")
-
 return
 
 }
@@ -169,14 +168,17 @@ if(c.length<confirmLimit){
 
 c.push(employee)
 
-}else if(w.length<waitingLimit){
+}
+
+else if(w.length<waitingLimit){
 
 w.push(employee)
 
-}else{
+}
 
-alert("No slot")
+else{
 
+alert("No slot available")
 return
 
 }
@@ -217,12 +219,13 @@ let remain=8-used
 
 document.getElementById("balance").innerHTML=
 
-"Used: "+used+"<br>Remaining: "+remain
+"<b>Employee:</b> "+employee+
+"<br>Used: "+used+
+"<br>Remaining: "+remain
 
 }
 
 </script>
 
 </body>
-
 </html>

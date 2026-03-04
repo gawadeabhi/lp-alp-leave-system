@@ -1,15 +1,83 @@
-body {
-  font-family: Arial;
-  background:#f4f6f9;
-  margin:20px;
+body{
+font-family:Arial;
+margin:0;
+background:#f2f2f2;
 }
 
-h2 {
-  color:#003366;
+#loginBox{
+padding:20px;
+text-align:center;
 }
 
-#board {
-  display:grid;
-  grid-template-columns: repeat(3,1fr);
-  gap:10px;
+#loginBox input{
+padding:10px;
+width:220px;
+font-size:16px;
+}
+
+#loginBox button{
+padding:10px 20px;
+font-size:16px;
+}
+
+#employeeHeader{
+padding:10px;
+background:white;
+font-size:14px;
+text-align:center;
+border-bottom:1px solid #ccc;
+}
+
+.leave-board{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+padding:10px;
+}
+
+.date-box{
+background:white;
+border-radius:6px;
+border:1px solid #ccc;
+padding:6px;
+font-size:12px;
+}
+
+.date-header{
+font-weight:bold;
+text-align:center;
+margin-bottom:5px;
+}
+
+.confirmed{
+border-top:1px solid #999;
+margin-top:4px;
+padding-top:4px;
+}
+
+.waiting{
+border-top:2px solid red;
+margin-top:6px;
+padding-top:4px;
+}
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.popup-content{
+background:white;
+padding:20px;
+border-radius:10px;
+width:85%;
+max-width:320px;
+text-align:center;
 }

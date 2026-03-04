@@ -1,116 +1,128 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
+
 <head>
-<meta charset="UTF-8">
-<title>LP-ALP Leave Planning</title><style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
 
 body{
-font-family:system-ui;
-background:#0f1115;
+font-family:Arial;
+background:#0f172a;
 color:white;
 margin:0;
-padding:15px;
+padding:10px;
 }
 
-h1{
-font-size:20px;
+h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.loginBox{
+text-align:center;
 margin-bottom:15px;
 }
 
-#loginBox{
-margin-bottom:20px;
-}
-
 input{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:none;
-margin-bottom:10px;
+padding:8px;
 font-size:16px;
+width:150px;
 }
 
 button{
-background:#3b82f6;
+padding:6px 10px;
 border:none;
-padding:8px 12px;
-border-radius:6px;
+border-radius:5px;
+background:#3b82f6;
 color:white;
-font-size:14px;
-}
-
-#board{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-}
-
-.day{
-background:#1a1d24;
-border-radius:12px;
-padding:8px;
-font-size:11px;
-}
-
-.date{
-font-weight:bold;
-margin-bottom:5px;
-text-align:center;
-}
-
-.confirmBox{
-color:#22c55e;
-min-height:60px;
-}
-
-.waitingBox{
-color:#f59e0b;
-min-height:40px;
-}
-
-.separator{
-border-top:1px solid #444;
-margin:4px 0;
-}
-
-.day button{
-width:48%;
-margin-top:4px;
-font-size:10px;
-padding:5px;
-}
-
-.actionRow{
-display:flex;
-justify-content:space-between;
-}
-
-#balance{
-position:fixed;
-bottom:10px;
-right:10px;
-background:#1a1d24;
-padding:10px;
-border-radius:10px;
 font-size:12px;
 }
 
-</style></head><body><h1>LP-ALP Leave Planning System</h1><div id="loginBox"><input id="empNo" placeholder="Employee Number"><button onclick="login()">Login</button>
+.board{
+display:grid;
+grid-template-columns: repeat(3,1fr);
+gap:8px;
+}
 
-</div><div id="board"></div><div id="balance"></div><script>
+.day{
+background:#1e293b;
+border-radius:8px;
+padding:6px;
+height:170px;
+display:flex;
+flex-direction:column;
+}
+
+.date{
+font-size:11px;
+text-align:center;
+color:#cbd5f5;
+margin-bottom:4px;
+}
+
+.confirm{
+font-size:11px;
+color:#22c55e;
+line-height:1.3;
+}
+
+.waiting{
+font-size:11px;
+color:#f59e0b;
+line-height:1.3;
+}
+
+.separator{
+border-top:2px solid red;
+margin:4px 0;
+}
+
+.btnRow{
+margin-top:auto;
+display:flex;
+gap:4px;
+}
+
+.cancel{
+background:#ef4444;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<h2>LP-ALP Leave Planning</h2>
+
+
+<div class="loginBox" id="loginBox">
+
+<input id="empNo" placeholder="Employee No">
+
+<button onclick="login()">Login</button>
+
+</div>
+
+
+<div class="board" id="board"></div>
+
+
+<script>
 
 let employee=""
-let leaveData={}
+let adminMode=false
 
-const confirmLimit=6
-const waitingLimit=4
 
 function login(){
 
-employee=document.getElementById("empNo").value.trim()
+employee=document.getElementById("empNo").value
 
-if(employee==""){
-alert("Enter Employee Number")
-return
+if(employee=="9999"){
+adminMode=true
 }
 
 document.getElementById("loginBox").style.display="none"
@@ -119,115 +131,66 @@ loadBoard()
 
 }
 
+
+
 function loadBoard(){
 
 let board=document.getElementById("board")
+
 board.innerHTML=""
 
-let today=new Date()
+let start=new Date()
 
-for(let i=0;i<30;i++){
+for(let i=0;i<60;i++){
 
 let d=new Date()
-d.setDate(today.getDate()+i)
 
-let date=d.toISOString().slice(0,10)
+d.setDate(start.getDate()+i)
+
+let date=d.toISOString().split("T")[0]
+
+let confirm=[]
+let waiting=[]
 
 let div=document.createElement("div")
+
 div.className="day"
-
-let confirmList=[]
-let waitingList=[]
-
-if(leaveData[date]){
-confirmList=leaveData[date].confirm
-waitingList=leaveData[date].waiting
-}
 
 div.innerHTML=
 
 "<div class='date'>"+date+"</div>"+
 
-"<div class='confirmBox'><b>Confirm</b><br>"+confirmList.join("<br>")+"</div>"+
+"<div class='confirm'>"+
+confirm.join("<br>")+
+"</div>"+
 
 "<div class='separator'></div>"+
 
-"<div class='waitingBox'><b>Waiting</b><br>"+waitingList.join("<br>")+"</div>"+
+"<div class='waiting'>"+
+waiting.join("<br>")+
+"</div>"+
 
-"<div class='actionRow'>"+
+"<div class='btnRow'>"+
 "<button onclick=\"applyLeave('"+date+"')\">Apply</button>"+
-"<button onclick=\"cancelLeave('"+date+"')\">Cancel</button>"+
+(adminMode ? "<button class='cancel'>Cancel</button>" : "")+
 "</div>"
 
 board.appendChild(div)
 
 }
 
-updateBalance()
-
 }
+
+
 
 function applyLeave(date){
 
-if(!leaveData[date]){
-leaveData[date]={confirm:[],waiting:[]}
-}
-
-let c=leaveData[date].confirm
-let w=leaveData[date].waiting
-
-if(c.includes(employee)||w.includes(employee)){
-alert("Already applied")
-return
-}
-
-if(c.length<confirmLimit){
-c.push(employee)
-}
-else if(w.length<waitingLimit){
-w.push(employee)
-}
-else{
-alert("No slot available")
-return
-}
-
-loadBoard()
+alert("Apply leave for "+date)
 
 }
 
-function cancelLeave(date){
+</script>
 
-if(!leaveData[date]) return
 
-leaveData[date].confirm=
-leaveData[date].confirm.filter(e=>e!=employee)
-
-leaveData[date].waiting=
-leaveData[date].waiting.filter(e=>e!=employee)
-
-loadBoard()
-
-}
-
-function updateBalance(){
-
-let used=0
-
-for(let d in leaveData){
-if(leaveData[d].confirm.includes(employee)){
-used++
-}
-}
-
-let remain=8-used
-
-document.getElementById("balance").innerHTML=
-"<b>Employee:</b> "+employee+
-"<br>Used: "+used+
-"<br>Remaining: "+remain
-
-}
-
-</script></body>
+</body>
 </html>

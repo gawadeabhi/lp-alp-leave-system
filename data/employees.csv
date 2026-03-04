@@ -1,4 +1,4 @@
-empNo,name,designation,defaultLimit,maxOccasion,active
+empNo,name,designation,defaultLimit,maxOccasion,active,overrideLimit,overrideOccasion
 4232,LEO M,LPG,8,3,true
 5071,VIRESH D,LPG,8,3,true
 5069,RAJESH D,LPG,8,3,true

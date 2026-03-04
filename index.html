@@ -1,17 +1,228 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LP ALP Leave Planning</title>
-<link rel="stylesheet" href="style.css">
-</head><body><div id="loginBox"><h2>Leave Planning System</h2><input id="empNo" placeholder="Enter Employee Number"><br><br>
+<meta charset="UTF-8">
+<title>LP-ALP Leave Planning</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:20px;
+}
+
+h1{
+color:#1a73e8;
+}
+
+#board{
+margin-top:20px;
+}
+
+.day{
+border:1px solid #999;
+padding:10px;
+margin:5px;
+width:30%;
+display:inline-block;
+vertical-align:top;
+}
+
+.confirm{
+color:green;
+}
+
+.waiting{
+color:orange;
+}
+
+button{
+padding:8px;
+margin:4px;
+}
+
+#balance{
+position:fixed;
+top:10px;
+right:10px;
+background:#f2f2f2;
+padding:10px;
+border:1px solid #888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>LP-ALP Leave Planning System</h1>
+
+<div id="loginBox">
+
+<input id="empNo" placeholder="Employee Number">
 
 <button onclick="login()">Login</button>
 
-</div><div id="dashboard" style="display:none"><div id="employeeHeader"></div><div class="board-container">
-<div id="leaveBoard" class="leave-board"></div>
-</div></div><div id="applyPopup" class="popup"><div class="popup-content"><h3>Apply Leave</h3><div id="popupInfo"></div><br><button onclick="applyLeave()">Apply Leave</button>
+</div>
 
-<button onclick="closePopup()">Cancel</button>
+<div id="balance"></div>
 
-</div></div><script src="app.js"></script></body>
+<div id="board"></div>
+
+<script>
+
+let employee=""
+let leaveData={}
+
+const confirmLimit=6
+const waitingLimit=4
+
+function login(){
+
+employee=document.getElementById("empNo").value
+
+if(employee==""){
+alert("Enter employee number")
+return
+}
+
+document.getElementById("loginBox").style.display="none"
+
+loadBoard()
+
+}
+
+function loadBoard(){
+
+let board=document.getElementById("board")
+
+board.innerHTML=""
+
+let today=new Date()
+
+for(let i=0;i<30;i++){
+
+let d=new Date()
+d.setDate(today.getDate()+i)
+
+let date=d.toISOString().slice(0,10)
+
+let div=document.createElement("div")
+
+div.className="day"
+
+let confirmList=[]
+let waitingList=[]
+
+if(leaveData[date]){
+
+confirmList=leaveData[date].confirm
+waitingList=leaveData[date].waiting
+
+}
+
+div.innerHTML=
+
+"<b>"+date+"</b><br><br>"+
+
+"<div class='confirm'>Confirm ("+confirmList.length+")<br>"+confirmList.join("<br>")+"</div>"+
+
+"<hr>"+
+
+"<div class='waiting'>Waiting ("+waitingList.length+")<br>"+waitingList.join("<br>")+"</div>"+
+
+"<br>"+
+
+"<button onclick=\"applyLeave('"+date+"')\">Apply</button>"+
+
+"<button onclick=\"cancelLeave('"+date+"')\">Cancel</button>"
+
+board.appendChild(div)
+
+}
+
+updateBalance()
+
+}
+
+function applyLeave(date){
+
+if(!leaveData[date]){
+
+leaveData[date]={confirm:[],waiting:[]}
+
+}
+
+let c=leaveData[date].confirm
+let w=leaveData[date].waiting
+
+if(c.includes(employee)||w.includes(employee)){
+
+alert("Already applied")
+
+return
+
+}
+
+if(c.length<confirmLimit){
+
+c.push(employee)
+
+}else if(w.length<waitingLimit){
+
+w.push(employee)
+
+}else{
+
+alert("No slot")
+
+return
+
+}
+
+loadBoard()
+
+}
+
+function cancelLeave(date){
+
+if(!leaveData[date]) return
+
+leaveData[date].confirm=
+leaveData[date].confirm.filter(e=>e!=employee)
+
+leaveData[date].waiting=
+leaveData[date].waiting.filter(e=>e!=employee)
+
+loadBoard()
+
+}
+
+function updateBalance(){
+
+let used=0
+
+for(let d in leaveData){
+
+if(leaveData[d].confirm.includes(employee)){
+
+used++
+
+}
+
+}
+
+let remain=8-used
+
+document.getElementById("balance").innerHTML=
+
+"Used: "+used+"<br>Remaining: "+remain
+
+}
+
+</script>
+
+</body>
+
 </html>

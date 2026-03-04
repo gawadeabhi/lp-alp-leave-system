@@ -1,4 +1,4 @@
 periodId,name,startDate,endDate,active
 2026_JAN_FEB,Jan-Feb 2026,2026-01-01,2026-02-28,false
 2026_MAR_APR,Mar-Apr 2026,2026-03-01,2026-04-15,true
-2026_APR_JUN,Apr-Jun 2026,2026-04-16,2026-06-15,true
+2026_APR_JUN,Apr-Jun 2026,2026-04-16,2026-06-15,false

@@ -1,14 +1,17 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
-  <title>LP Leave Board</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LP ALP Leave Planning</title>
+<link rel="stylesheet" href="style.css">
+</head><body><div id="loginBox"><h2>Leave Planning System</h2><input id="empNo" placeholder="Enter Employee Number"><br><br>
 
-<body>
-  <h2>Leave Planning Board</h2>
-  <div id="board"></div>
+<button onclick="login()">Login</button>
 
-  <script src="app.js"></script>
-</body>
+</div><div id="dashboard" style="display:none"><div id="employeeHeader"></div><div class="board-container">
+<div id="leaveBoard" class="leave-board"></div>
+</div></div><div id="applyPopup" class="popup"><div class="popup-content"><h3>Apply Leave</h3><div id="popupInfo"></div><br><button onclick="applyLeave()">Apply Leave</button>
+
+<button onclick="closePopup()">Cancel</button>
+
+</div></div><script src="app.js"></script></body>
 </html>

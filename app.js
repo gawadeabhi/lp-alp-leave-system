@@ -1,1 +1,0 @@
-console.log("LP Leave System Started");

@@ -1,0 +1,13 @@
+rule,value,description
+advanceMonthsLimit,2,Maximum months in advance allowed
+extraAdvanceDays,3,Extra days added after months
+stopBeforeDays,3,Minimum days before leave date
+lpgDailyLimit,3,Maximum confirmed LPG leaves per day
+alpDailyLimit,4,Maximum confirmed ALP leaves per day
+lpgWaitingLimit,5,Maximum LPG waiting list per day
+alpWaitingLimit,5,Maximum ALP waiting list per day
+defaultLeaveLimit,8,Default leave days per period
+defaultOccasionLimit,3,Default occasions allowed
+allowSwap,true,Admin can swap leave
+autoPromoteWaiting,true,Waiting leave auto confirm
+reportDaysPerPage,15,Days per report page
